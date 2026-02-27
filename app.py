@@ -1,6 +1,26 @@
 import streamlit as st
 import pandas as pd
+from streamlit_gsheets import GSheetsConnection
 from datetime import datetime
+
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+# --- Al final de tu código, en el botón de guardar, añade esto: ---
+if st.button("Guardar Registro Tport"):
+    nuevo_dato = {
+        "Fecha": str(fecha),
+        "Hora": str(hora),
+        "Motivo": motivo,
+        "Nave": nave,
+        "Estanque": tk,
+        "Sensor": sensor,
+        "Promedio": promedio,
+        "Sello_TK208": sellos_data["Entrada TK208 (08)"]
+    }
+    
+    # Esto agrega la fila al final del Google Sheets
+    conn.create(data=[nuevo_dato])
+    st.success("✅ ¡Datos guardados en Google Sheets!")
 
 # Configuración de la página
 st.set_page_config(page_title="Tport - Medición de Estanques", layout="wide")
